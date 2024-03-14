@@ -1,13 +1,21 @@
 const path = require("path");
-const http = require("http");
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const expressHbs = require("express-handlebars");
 
 const app = express();
 
+app.engine(
+  "hbs",
+  expressHbs({
+    layoutsDir: "views/layouts/",
+    defaultLayout: "main-layout",
+    extname: "hbs",
+  })
+);
 // https://expressjs.com/en/4x/api.html#app.set
-app.set("view engine", "pug");
+app.set("view engine", "hbs");
 app.set("views", "views");
 
 const adminData = require("./routes/admin");
