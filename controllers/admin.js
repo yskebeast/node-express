@@ -20,22 +20,12 @@ exports.postAddProduct = (req, res, next) => {
   res.redirect("/");
 };
 
-exports.getProduct = (req, res, next) => {
-  Product.fetchAll((products) => {
-    res.render("admin/products", {
-      prods: products,
-      pageTitle: "Admin Products",
-      path: "/admin-products",
-    });
-  });
-};
-
 exports.getProducts = (req, res, next) => {
   Product.fetchAll((products) => {
     res.render("admin/products", {
       prods: products,
       pageTitle: "Admin Products",
-      path: "/admin-products",
+      path: "/admin/products",
     });
   });
 };
