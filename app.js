@@ -17,13 +17,7 @@ const shopRoutes = require("./routes/shop");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", (req, res, next) => {
-  console.log("this always runs");
-  next();
-});
-
 app.use("/admin", adminRoutes);
-
 app.use(shopRoutes);
 
 app.use(errorController.get404);
@@ -31,9 +25,9 @@ app.use(errorController.get404);
 sequelize
   .sync()
   .then((result) => {
-    console.log(result);
+    // console.log(result);
     app.listen(3000);
-    // const server = http.createServer(app);
-    // server.listen(3000);
   })
-  .catch((err) => console.log(err));
+  .catch((err) => {
+    console.log(err);
+  });
