@@ -115,7 +115,8 @@ exports.postCartDeleteProduct = (req, res, next) => {
     })
     .then((result) => {
       res.redirect("/cart");
-    });
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.postOrder = (req, res, next) => {
@@ -124,27 +125,26 @@ exports.postOrder = (req, res, next) => {
     .getCart()
     .then((cart) => {
       fetchedCart = cart;
-      return cart.getProducts().then((products) => {
-        return req.user
-          .createOrder()
-          .then((order) => {
-            return order.addProducts(
-              products.map((product) => {
-                product.orderItem = { quantity: product.cartItem.quantity };
-                return product;
-              })
-            );
-          })
-          .catch((err) => console.log(err));
-        console.log(products);
-      });
+      return cart.getProducts();
+    })
+    .then((products) => {
+      return req.user
+        .createOrder()
+        .then((order) => {
+          return order.addProducts(
+            products.map((product) => {
+              product.orderItem = { quantity: product.cartItem.quantity };
+              return product;
+            })
+          );
+        })
+        .catch((err) => console.log(err));
     })
     .then((result) => {
       return fetchedCart.setProducts(null);
     })
     .then((result) => {
       res.redirect("/orders");
-      // console.log(result);
     })
     .catch((err) => console.log(err));
 };
@@ -160,11 +160,4 @@ exports.getOrders = (req, res, next) => {
       });
     })
     .catch((err) => console.log(err));
-};
-
-exports.getCheckout = (req, res, next) => {
-  res.render("shop/checkout", {
-    path: "/checkout",
-    pageTitle: "Checkout",
-  });
 };
