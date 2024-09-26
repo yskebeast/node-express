@@ -2,17 +2,30 @@ require("dotenv").config();
 const mongodb = require("mongodb");
 const MongoClient = mongodb.MongoClient;
 
-const url = `mongodb+srv://${process.env.PROJECT_NAME}:${process.env.PASSWORD}@mongoyus.w7z2ufz.mongodb.net/?retryWrites=true&w=majority&appName=mongoyus`;
+let _db;
+
+const url = `mongodb+srv://${process.env.PROJECT_NAME}:${process.env.PASSWORD}@express.wiuylkq.mongodb.net/shop?retryWrites=true&w=majority&appName=express`;
+// const url = `mongodb+srv://${process.env.PROJECT_NAME}:${process.env.PASSWORD}@express.wiuylkq.mongodb.net/`;
 
 const mongoConnect = (callback) => {
   MongoClient.connect(url)
     .then((client) => {
       console.log("Connected!");
-      callback(client);
+      _db = client.db();
+      callback();
     })
     .catch((err) => {
       console.log(err);
+      throw err;
     });
 };
 
-module.exports = mongoConnect;
+const getDb = () => {
+  if (_db) {
+    return _db;
+  }
+  throw "No database found!";
+};
+
+exports.mongoConnect = mongoConnect;
+exports.getDb = getDb;
